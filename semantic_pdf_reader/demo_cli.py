@@ -2,7 +2,11 @@
 """
 Example command-line usage:
 
+    # Create a new highlighted PDF file
     python -m semantic_pdf_reader.demo_cli input.pdf "termination clause" output.pdf
+    
+    # For in-place highlighting, use search_and_highlight.py instead:
+    python search_and_highlight.py input.pdf "termination clause"
 
 This will:
   1. Build an index for input.pdf

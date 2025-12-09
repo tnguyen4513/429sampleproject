@@ -37,6 +37,8 @@ class PdfIndex:
 
 
 def build_tfidf_index(chunks: List[Chunk]) -> Tuple[TfidfVectorizer, Any]:
+    if not chunks:
+        raise ValueError("Cannot build TF-IDF index from empty chunks list")
     texts = [c.text for c in chunks]
     vectorizer = TfidfVectorizer(
         ngram_range=(1, 2),
@@ -51,6 +53,8 @@ def build_semantic_index(
     chunks: List[Chunk],
     model_name: str = DEFAULT_EMBEDDING_MODEL
 ) -> Tuple[str, np.ndarray]:
+    if not chunks:
+        raise ValueError("Cannot build semantic index from empty chunks list")
     model = SentenceTransformer(model_name)
     texts = [c.text for c in chunks]
     emb = model.encode(texts, convert_to_numpy=True, show_progress_bar=True)

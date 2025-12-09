@@ -5,7 +5,7 @@ import numpy as np
 from .config import Chunk, DEFAULT_HYBRID_ALPHA
 from .indexing import PdfIndex
 
-
+# Normalize scores to [0, 1] for hybrid scoring combination
 def _normalize_scores(scores: np.ndarray) -> np.ndarray:
     """
     Normalize a score vector into [0, 1].
@@ -13,10 +13,11 @@ def _normalize_scores(scores: np.ndarray) -> np.ndarray:
     s_min = scores.min()
     s_max = scores.max()
     if s_max - s_min < 1e-10:
-        return np.zeros_like(scores)
+        # All scores are equal - return 0.5 for all (middle value)
+        return np.full_like(scores, 0.5)
     return (scores - s_min) / (s_max - s_min)
 
-
+# Lexical scoring using TF-IDF cosine similarity
 def lexical_scores(query: str, index: PdfIndex) -> np.ndarray:
     q_vec = index.vectorizer.transform([query])
     # cosine similarity with tfidf_matrix (L2 not guaranteed, but it's fine as a score)
@@ -24,6 +25,7 @@ def lexical_scores(query: str, index: PdfIndex) -> np.ndarray:
     return scores
 
 
+# Semantic scoring using cosine similarity with embeddings
 def semantic_scores(query: str, index: PdfIndex) -> np.ndarray:
     model = index.embedding_model
     q_emb = model.encode([query], convert_to_numpy=True)[0]
@@ -31,7 +33,7 @@ def semantic_scores(query: str, index: PdfIndex) -> np.ndarray:
     scores = index.embedding_matrix @ q_emb  # cosine similarity
     return scores
 
-
+# Hybrid scoring combining lexical and semantic scores
 def hybrid_scores(
     query: str,
     index: PdfIndex,
@@ -45,7 +47,7 @@ def hybrid_scores(
 
     return alpha * lex_n + (1.0 - alpha) * sem_n
 
-
+# Retrieve top-k chunks(top-k chunks means the most relevant sections of the PDF) based on hybrid scores
 def top_k_chunks(
     query: str,
     index: PdfIndex,
