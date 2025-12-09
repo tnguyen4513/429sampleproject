@@ -1,41 +1,46 @@
-How to run:
-cd 429sampleproject
+# Semantic PDF Reader
 
-# 1. Create a venv
+A GUI application for semantic search in PDF documents using AI embeddings.
+
+## Setup & Installation
+
+### 1. Create and activate virtual environment
+
+**On Windows:**
+```powershell
 python3 -m venv .venv
-
-# 2. Activate it on Mac
-source .venv/bin/activate
-
-# 2. Activate it on Windows
 .\.venv\Scripts\activate
+```
 
-# 3. Install packages inside the venv
+**On Mac/Linux:**
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+### 2. Install dependencies
+
+```bash
 pip install --upgrade pip
 pip install "numpy<2" pymupdf sentence-transformers scikit-learn
+```
 
-
-# 4. Install pyinstaller to create app
-pip install pyinstaller==6.6.0
-
-(optional)
+(Optional for better setuptools compatibility):
+```bash
 pip install jaraco
-pip install --upgrade setuptools 
+pip install --upgrade setuptools
+```
 
-# 5. Create app using pyinstaller: (it may take up to 15 minutes)
-pyinstaller run_reader.spec
+## Running the Application
 
-# faster install - Not in onefile:
-python.exe -m PyInstaller run_reader.py --onefile --windowed
+Run the GUI application directly with Python:
 
+```bash
+python3 run_reader.py
+```
 
-# 6. if app can not run 
-remove the build and dist folders then rebuild step 5
-    Remove-Item -Recurse -Force build
-    Remove-Item -Recurse -Force dist
-    Remove-Item -Force *.spec
-
-# Run the reader for testing
-python3 run_reader.py <input_file> <search_term> <output_file>
-example run: 
-python3 run_reader.py test.pdf "pixels" highlighted.pdf
+This will launch the Semantic PDF Reader GUI where you can:
+- **Choose a PDF** to analyze
+- **Enter search queries** to find relevant content
+- **Navigate matches** with highlighting
+- **View semantic results** with scores
