@@ -67,8 +67,8 @@ hiddenimports += [
 ]
 
 a = Analysis(
-    ['run_reader.py'],
-    pathex=[],
+    ['../run_reader.py'],
+    pathex=['.'],
     binaries=binaries,
     datas=datas,
     hiddenimports=hiddenimports,
